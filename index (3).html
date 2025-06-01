@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Biodata Fahry Aditya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .slide {
+        display: none;
+        transition: opacity 0.5s ease;
+      }
+      .slide.active {
+        display: block;
+        animation: fadeIn 0.5s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateX(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      img:hover {
+        transform: scale(1.05);
+        transition: transform 0.3s ease;
+      }
+
+      #popup-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 50;
+        opacity: 1;
+        animation: fadeInPopup 0.4s ease forwards;
+      }
+
+      #popup-box {
+        background: #1f2937;
+        padding: 2rem 3rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+        text-align: center;
+        color: white;
+        max-width: 320px;
+        animation: scaleInPopup 0.4s ease forwards;
+      }
+
+      #popup-box button {
+        margin-top: 1.5rem;
+        background-color: #3b82f6;
+        padding: 0.5rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease;
+      }
+      #popup-box button:hover {
+        background-color: #2563eb;
+      }
+
+      @keyframes fadeInPopup {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes scaleInPopup {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeOutPopup {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="bg-black text-white font-sans h-screen overflow-hidden"
+    ondblclick="nextSlide()"
+  >
+    <div id="popup-overlay">
+      <div id="popup-box">
+        <h2 class="text-2xl font-bold mb-4">Selamat Datang!</h2>
+        <p>Selamat datang di halaman biodata saya.</p>
+        <button onclick="closePopup()">Mulai</button>
+      </div>
+    </div>
+
+    <canvas
+      id="stars-canvas"
+      class="absolute inset-0 -z-20"
+    ></canvas>
+    <script>
+      const canvas = document.getElementById("stars-canvas");
+      const ctx = canvas.getContext("2d");
+      let stars = [];
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        generateStars();
+      }
+
+      function generateStars() {
+        stars = [];
+        for (let i = 0; i < 100; i++) {
+          stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.5 + 0.5,
+            opacity: Math.random(),
+            speed: Math.random() * 0.02 + 0.005,
+          });
+        }
+      }
+
+      function drawStars() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let star of stars) {
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+          ctx.fill();
+          star.opacity += star.speed;
+          if (star.opacity >= 1 || star.opacity <= 0) {
+            star.speed *= -1;
+          }
+        }
+        requestAnimationFrame(drawStars);
+      }
+
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+      drawStars();
+    </script>
+
+    <div
+      class="absolute inset-0 overflow-hidden -z-10"
+    >
+      <div
+        class="w-96 h-96 bg-purple-500 opacity-30 rounded-full blur-3xl absolute top-1/3 left-1/3"
+      ></div>
+      <div
+        class="w-80 h-80 bg-blue-500 opacity-30 rounded-full blur-2xl absolute top-0 right-1/4"
+      ></div>
+    </div>
+
+    <div
+      class="absolute top-5 left-5 flex items-center space-x-4 z-10"
+    >
+      <img
+        src="https://assets.onecompiler.app/43k3n8v9v/43kcbbeu9/1000038244.jpg"
+        alt="Foto Profil"
+        class="w-20 h-20 rounded-full border-4 border-blue-500 shadow-md"
+      />
+      <div>
+        <h1 class="text-xl font-bold">Fahry Aditya</h1>
+        <p class="text-gray-400 text-sm">Dipanggil: Aditya</p>
+        <p class="text-sm">Usia: 15 tahun</p>
+        <p id="random-fact" class="text-yellow-300 text-xs italic mt-1"></p>
+      </div>
+    </div>
+
+    <div
+      id="main-content"
+      class="pl-5 pt-32 max-w-md text-left opacity-0 pointer-events-none transition-opacity duration-500"
+    >
+      <div class="slide active" id="slide-1">
+        <h2 class="text-xl font-semibold text-blue-400 mb-2">Informasi Pribadi</h2>
+        <p>Lahir: 06 April 2010</p>
+        <p>Sekolah: SMA 9</p>
+      </div>
+
+      <div class="slide" id="slide-2">
+        <h2 class="text-xl font-semibold text-blue-400 mb-2">Minat & Hobi</h2>
+        <p>Minat: Membuat Coding</p>
+        <ul class="list-disc list-inside mt-2">
+          <li>Fotografi</li>
+          <li>Menonton Anime</li>
+          <li>Membuat Coding</li>
+        </ul>
+        <h2 class="text-xl font-semibold text-blue-400 mt-6 mb-2">Skill</h2>
+        <p>
+          Saya memiliki ketertarikan besar dalam teknologi dan seni visual. Saya
+          mulai belajar coding sejak dini dan juga menyukai fotografi sebagai bentuk
+          ekspresi kreatif.
+        </p>
+        <p class="mt-2">
+          Saya juga bermain <em>Punishing Gray Raven</em>, game dengan cerita dan
+          desain karakter yang menarik.
+        </p>
+      </div>
+
+      <div class="slide" id="slide-3">
+        <h2 class="text-xl font-semibold text-blue-400 mb-2">Foto dari Hobi</h2>
+        <img
+          src="https://assets.onecompiler.app/43k3n8v9v/43kcbbeu9/1000038267.jpg"
+          alt="foto sunset"
+          class="w-64 mb-4 rounded shadow-lg"
+        />
+        <img
+          src="https://assets.onecompiler.app/43k3n8v9v/43kcbbeu9/1000038266.jpg"
+          alt="foto sunset"
+          class="w-64 mb-4 rounded shadow-lg"
+        />
+        <img
+          src="https://assets.onecompiler.app/43k3n8v9v/43kcbbeu9/1000038271.jpg"
+          alt="foto sunset"
+          class="w-64 mb-4 rounded shadow-lg"
+        />
+        <p class="mt-6 text-xs text-gray-500">© 2025 Fahry Aditya</p>
+      </div>
+
+      <p class="mt-6 text-sm text-gray-400 italic">
+        Ketuk 2 kali atau klik tombol di bawah untuk pindah slide
+      </p>
+    </div>
+
+    <div class="absolute bottom-14 right-5 z-10">
+      <button
+        onclick="nextSlide()"
+        class="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 transition"
+      >
+        Next
+      </button>
+    </div>
+
+    <div
+      class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10"
+    >
+      <div
+        class="w-3 h-3 rounded-full bg-blue-500"
+        id="dot-1"
+      ></div>
+      <div
+        class="w-3 h-3 rounded-full bg-gray-500"
+        id="dot-2"
+      ></div>
+      <div
+        class="w-3 h-3 rounded-full bg-gray-500"
+        id="dot-3"
+      ></div>
+    </div>
+
+    <script>
+      let currentSlide = 1;
+      const totalSlides = 3; // karena hanya 3 slide yang ada
+
+      const facts = [
+        "Aku suka memfoto langit malam.",
+        "Aku main Punishing Gray Raven hampir tiap hari.",
+        "Aku ingin menjadi Web Developer suatu hari nanti.",
+        "Aku tidak suka keramaian",
+      ];
+
+      document.getElementById("random-fact").innerText =
+        facts[Math.floor(Math.random() * facts.length)];
+
+      function updateDots() {
+        for (let i = 1; i <= totalSlides; i++) {
+          const dot = document.getElementById(`dot-${i}`);
+          if (i === currentSlide) {
+            dot.classList.remove("bg-gray-500");
+            dot.classList.add("bg-blue-500");
+          } else {
+            dot.classList.remove("bg-blue-500");
+            dot.classList.add("bg-gray-500");
+          }
+        }
+      }
+
+      function showSlide(n) {
+        for (let i = 1; i <= totalSlides; i++) {
+          document.getElementById(`slide-${i}`).classList.remove("active");
+        }
+        document.getElementById(`slide-${n}`).classList.add("active");
+        updateDots();
+      }
+
+      function nextSlide() {
+        currentSlide++;
+        if (currentSlide > totalSlides) currentSlide = 1;
+        showSlide(currentSlide);
+      }
+
+      function closePopup() {
+        const popup = document.getElementById("popup-overlay");
+        popup.style.animation = "fadeOutPopup 0.4s ease forwards";
+        setTimeout(() => {
+          popup.style.display = "none";
+          const mainContent = document.getElementById("main-content");
+          // hapus kelas yang menonaktifkan opacity dan pointer-events
+          mainContent.classList.remove("opacity-0", "pointer-events-none");
+          // tambahkan kelas untuk tampil dengan transisi smooth
+          mainContent.classList.add("opacity-100");
+        }, 400);
+      }
+    </script>
+  </body>
+</html>
